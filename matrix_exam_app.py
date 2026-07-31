@@ -472,9 +472,15 @@ else:
     
 #=======
         action = st.radio("Chọn hành động:", ["🧠 Tex hóa nội dung", "🚀 Sinh đề tương tự"], horizontal=True)
-
         if st.button("⚙️ Thực hiện"):
             client = genai.Client(api_key=api_key)
+
+            st.write("## Các model khả dụng")
+
+            for m in client.models.list():
+                st.write(m.name)
+
+            st.stop()
             if action.startswith("🧠"):
             #====
                 prompt = f"""
