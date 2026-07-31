@@ -20,7 +20,7 @@ if st.button("Gọi Gemini"):
         client = genai.Client(api_key=api_key)
 
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.5-flash",
             contents="Hãy giới thiệu bản thân trong đúng 1 câu."
         )
 
