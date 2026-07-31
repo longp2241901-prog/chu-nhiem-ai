@@ -1,4 +1,4 @@
 streamlit
 python-docx
-groq
+google-genai
 PyPDF2
