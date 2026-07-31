@@ -474,6 +474,14 @@ else:
         action = st.radio("Chọn hành động:", ["🧠 Tex hóa nội dung", "🚀 Sinh đề tương tự"], horizontal=True)
         if st.button("⚙️ Thực hiện"):
             client = genai.Client(api_key=api_key)
+
+            st.write("### Models được cấp quyền:")
+
+            for m in client.models.list():
+                if "generateContent" in m.supported_actions:
+                    st.write(m.name)
+
+            st.stop()
             all_questions = []
             if action.startswith("🧠"):
             #====
