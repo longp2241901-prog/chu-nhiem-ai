@@ -1,5 +1,5 @@
 import streamlit as st
-from groq import Groq
+from google import genai
 import os
 import re
 import random
@@ -77,7 +77,7 @@ st.markdown("### 🔐 Tuỳ chọn API Key")
 
 # 1) Ô nhập API Key
 user_api_key = st.text_input(
-    "Nhập Groq API Key của bạn (bắt đầu bằng 'gsk_...')",
+    "Nhập Gemini API Key của bạn (bắt đầu bằng 'gsk_...')",
     type="password"
 )
 
@@ -86,7 +86,7 @@ if st.button("📘 Hướng dẫn lấy API key"):
     st.info(
         """
         💡 **Cách lấy Groq API Key:**
-        1. Truy cập: https://console.groq.com/keys  
+        1. Truy cập: https://aistudio.google.com/app/apikey 
         2. Đăng nhập (hoặc tạo tài khoản miễn phí)  
         3. Nhấn **Create API Key**  
         4. Copy key dạng `gsk_...` và dán vào ô phía trên.
@@ -103,7 +103,7 @@ if st.button("📘 Hướng dẫn lấy API key"):
 use_default = st.checkbox("🟢 Sử dụng ứng dụng **không cần nhập API key** (dùng key mặc định)")
 
 # ===== KEY MẶC ĐỊNH =====
-DEFAULT_API_KEY = st.secrets["GROQ_API_KEY"]
+DEFAULT_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 # Xử lý logic
 if use_default:
@@ -474,7 +474,7 @@ else:
         action = st.radio("Chọn hành động:", ["🧠 Tex hóa nội dung", "🚀 Sinh đề tương tự"], horizontal=True)
 
         if st.button("⚙️ Thực hiện"):
-            client = Groq(api_key=api_key)
+            client = genai.Client(api_key=api_key)
             if action.startswith("🧠"):
             #====
                 prompt = f"""
@@ -526,13 +526,11 @@ Yêu cầu:
 """
 
             try:
-                chat_completion = client.chat.completions.create(
-                    messages=[{"role": "user", "content": prompt}],
-                    model="llama-3.3-70b-versatile",
-                    #model="llama-3.1-8b-instant",
-                    temperature=0.7,
+                response = client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=prompt,
                 )
-                output = chat_completion.choices[0].message.content.strip()
+                output = response.text
                 st.code(output, language="latex")
 
                 # ✅ Tách các câu hỏi thành danh sách
@@ -561,7 +559,7 @@ if "all_questions" not in st.session_state:
     st.session_state.all_questions = []
 
 if submitted and not mode.startswith("📤"):
-    client = Groq(api_key=api_key)
+    client = genai.Client(api_key=api_key)
     all_questions = []
     if mode.startswith("✍️"):
         if not user_input.strip():
@@ -579,13 +577,11 @@ Yêu cầu:
 ⚠️ Chỉ trả về LaTeX, không thêm chú thích nào khác.
 """
             try:
-                chat_completion = client.chat.completions.create(
-                    messages=[{"role": "user", "content": prompt}],
-                    model="llama-3.3-70b-versatile",
-                    #model="llama-3.1-8b-instant",
-                    temperature=0.7,
+                response = client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=prompt,
                 )
-                output = chat_completion.choices[0].message.content.strip()
+                output = response.text
                 all_questions.append(output)
                 st.code(output, language="latex")
                 st.success(f"✅ Đã sinh {so_luong_tu_nhap} câu từ nội dung nhập thủ công.")
@@ -612,13 +608,11 @@ Yêu cầu:
 ⚠️ Chỉ trả về LaTeX, không thêm chữ nào khác.
 """
             try:
-                chat_completion = client.chat.completions.create(
-                    messages=[{"role": "user", "content": prompt}],
-                    model="llama-3.3-70b-versatile",
-                    #model="llama-3.1-8b-instant",
-                    temperature=0.7,
+                response = client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=prompt,
                 )
-                output = chat_completion.choices[0].message.content.strip()
+                output = response.text
                 st.code(output, language="latex")
                 all_questions.append(output)
                 st.success(f"✅ Đã sinh {cfg['count']} câu từ file.")
