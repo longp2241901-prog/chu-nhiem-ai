@@ -527,7 +527,7 @@ Yêu cầu:
 
             try:
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash-lite-lite",
+                    model="gemini-2.5-pro-lite",
                     contents=prompt,
                 )
                 output = response.text
@@ -578,7 +578,7 @@ Yêu cầu:
 """
             try:
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash-lite",
+                    model="gemini-2.5-pro",
                     contents=prompt,
                 )
                 output = response.text
@@ -609,7 +609,7 @@ Yêu cầu:
 """
             try:
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash-lite",
+                    model="gemini-2.5-pro",
                     contents=prompt,
                 )
                 output = response.text
